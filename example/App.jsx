@@ -3,7 +3,7 @@ import logo from './logo.png'
 
 import styled from 'styled-components'
 
-import {VideoPlayer} from '../lib/index'
+import {Player} from '../lib/index'
 
 const AppContainer = styled.div`
   text-align: center;
@@ -36,7 +36,7 @@ function App () {
       <p>
         To get started, edit <code>src/App.js</code> and save to reload.
       </p>
-      <VideoPlayer />
+      <Player />
     </AppContainer>
   )
 }

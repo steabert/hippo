@@ -13,6 +13,32 @@ const VideoNative = styled.video`
   width: 100%;
 `
 
+const useEventState = (ref, eventName) => {
+  const [eventState, setEventState] = useState(false)
+
+  const setEventStateTrue = () => {
+    debugLog(eventName)
+    setEventState(true)
+  }
+
+  const setEventStateFalse = () => {
+    debugLog(eventName)
+    setEventState(false)
+  }
+
+  useEffect(() => {
+    if (!eventState) {
+      const videoEl = ref.current
+      videoEl.addEventListener(eventName, setEventStateTrue)
+      return () => {
+        videoEl.removeEventListener(eventName, setEventStateTrue)
+      }
+    }
+  }, [eventState])
+
+  return [eventState, setEventStateFalse]
+}
+
 /**
  * Properties:
  *
@@ -33,8 +59,8 @@ function WsRtspVideo ({
 }) {
   const videoRef = useRef(null)
   const [pipeline, setPipeline] = useState(null)
-  const [canplay, setCanplay] = useState(false)
-  const [playing, setPlaying] = useState(false)
+  const [canplay, unsetCanplay] = useEventState(videoRef, 'canplay')
+  const [playing, unsetPlaying] = useEventState(videoRef, 'playing')
   const [fetching, setFetching] = useState(false)
 
   useEffect(() => {
@@ -44,44 +70,44 @@ function WsRtspVideo ({
     } else if (!play && playing) {
       debugLog('pause')
       videoRef.current.pause()
-      setPlaying(false)
+      unsetPlaying()
     }
   })
 
-  useEffect(() => {
-    if (!canplay) {
-      const setCanplayTrue = () => {
-        debugLog('canplay')
-        setCanplay(true)
-      }
-      const videoEl = videoRef.current
-      videoEl.addEventListener('canplay', setCanplayTrue)
-      return () => {
-        videoEl.removeEventListener('canplay', setCanplayTrue)
-      }
-    }
-  }, [videoRef.current, canplay])
+  // useEffect(() => {
+  //   if (!canplay) {
+  //     const setCanplayTrue = () => {
+  //       debugLog('canplay')
+  //       setCanplay(true)
+  //     }
+  //     const videoEl = videoRef.current
+  //     videoEl.addEventListener('canplay', setCanplayTrue)
+  //     return () => {
+  //       videoEl.removeEventListener('canplay', setCanplayTrue)
+  //     }
+  //   }
+  // }, [videoRef.current, canplay])
 
-  useEffect(() => {
-    if (!playing) {
-      const setPlayingTrue = () => {
-        debugLog('playing')
-        setPlaying(true)
-      }
-      const videoEl = videoRef.current
-      videoEl.addEventListener('playing', setPlayingTrue)
-      return () => {
-        videoEl.removeEventListener('playing', setPlayingTrue)
-      }
-    }
-  }, [videoRef.current, playing])
+  // useEffect(() => {
+  //   if (!playing) {
+  //     const setPlayingTrue = () => {
+  //       debugLog('playing')
+  //       setPlaying(true)
+  //     }
+  //     const videoEl = videoRef.current
+  //     videoEl.addEventListener('playing', setPlayingTrue)
+  //     return () => {
+  //       videoEl.removeEventListener('playing', setPlayingTrue)
+  //     }
+  //   }
+  // }, [videoRef.current, playing])
 
   useEffect(() => {
     if (!ws || !rtsp) {
       debugLog('src removed')
       videoRef.current.src = ''
-      setCanplay(false)
-      setPlaying(false)
+      unsetCanplay()
+      unsetPlaying()
     } else if (videoRef.current) {
       debugLog('create pipeline')
       const pipeline = new pipelines.Html5VideoPipeline({

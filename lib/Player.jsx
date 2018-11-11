@@ -1,31 +1,13 @@
 import React, {useState} from 'react'
-import styled from 'styled-components'
 
+import {Container, Layer} from './Container.jsx'
 import WsRtspVideo from './WsRtspVideo.jsx'
-
-const VideoContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-`
-
-const VideoDisplay = styled.div`
-  width: 320px;
-  height: 180px;
-  background: green;
-`
-
-const VideoControls = styled.div`
-  text-align: center;
-  width: 320px;
-  height: 20px;
-  background: black;
-`
+import Controls from './Controls.jsx'
 
 const WS_URI = 'ws://localhost:8854'
 const RTSP_URI = 'rtsp://localhost:8554/test'
 
-function VideoPlayer ({
+function Player ({
   ended,
   onEnded,
   onPlaying,
@@ -50,22 +32,25 @@ function VideoPlayer ({
     setRtsp('')
   }
   return (
-    <VideoContainer>
-      <VideoDisplay>
+    <Container>
+      <Layer>
         <WsRtspVideo
           key={key}
           play={play}
           ws={WS_URI}
           rtsp={rtsp}
         />
-      </VideoDisplay>
-      <VideoControls>
-        <button onClick={toggle}>{play ? 'Pause!' : 'Play!'}</button>
-        <button onClick={stop}>Stop</button>
-        <button onClick={refresh}>Refresh</button>
-      </VideoControls>
-    </VideoContainer>
+      </Layer>
+      <Layer>
+        <Controls
+          play={play}
+          onPlay={toggle}
+          onStop={stop}
+          onRefresh={refresh}
+        />
+      </Layer>
+    </Container>
   )
 }
 
-export default VideoPlayer
+export default Player
