@@ -3,6 +3,12 @@ import styled from 'styled-components'
 
 import useUserActive from './useUserActive.js'
 
+import Button from './Button.jsx'
+import Play from './img/play.svg'
+import Pause from './img/pause.svg'
+import Stop from './img/stop.svg'
+import Replay from './img/replay.svg'
+
 const ControlArea = styled.div`
   width: 100%;
   height: 100%;
@@ -14,14 +20,16 @@ const ControlArea = styled.div`
 const ControlBar = styled.div`
   text-align: center;
   width: 100%;
-  height: 20px;
-  background: black;
+  height: 32px;
+  background: #00000066;
   opacity: ${(props) => props.visible ? 1 : 0};
   transition: opacity 0.3s ease-in-out;
+  display: flex;
 `
 
 function Controls ({
   play,
+  src,
   onPlay,
   onStop,
   onRefresh
@@ -32,9 +40,9 @@ function Controls ({
   return (
     <ControlArea ref={controlArea}>
       <ControlBar visible={!play || userActive}>
-        <button onClick={onPlay}>{play ? 'Pause!' : 'Play!'}</button>
-        <button onClick={onStop}>Stop</button>
-        <button onClick={onRefresh}>Refresh</button>
+        <Button onClick={onPlay}>{play ? <Pause /> : <Play />}</Button>
+        {src && <Button onClick={onStop}><Stop /></Button>}
+        {src && <Button onClick={onRefresh}><Replay /></Button>}
       </ControlBar>
     </ControlArea>
   )

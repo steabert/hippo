@@ -27,7 +27,7 @@ const ContainerBase = styled.div`
 const ContainerBody = styled.div`
   width: 100%;
   padding-top: ${(props) => getHeightPct(props.aspectRatio)}%;
-  background: green;
+  background: black;
   position: relative;
 `
 
