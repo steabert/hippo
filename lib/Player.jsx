@@ -2,11 +2,13 @@ import React, {useState} from 'react'
 
 import {Container, Layer} from './Container.jsx'
 import WsRtspVideo from './WsRtspVideo.jsx'
+import WsRtspCanvas from './WsRtspCanvas.jsx'
 import Controls from './Controls.jsx'
 import Feedback from './Feedback.jsx'
 
 const WS_URI = 'ws://localhost:8854'
-const RTSP_URI = 'rtsp://localhost:8554/test'
+const RTSP_URI_H264 = 'rtsp://localhost:8554/test'
+const RTSP_URI_MJPEG = 'rtsp://localhost:8555/test'
 
 function Player ({
   ended,
@@ -24,7 +26,7 @@ function Player ({
       setPlay(false)
     } else {
       setWaiting(true)
-      setSrc(RTSP_URI)
+      setSrc(RTSP_URI_MJPEG)
       setPlay(true)
     }
   }
@@ -41,7 +43,7 @@ function Player ({
   return (
     <Container>
       <Layer>
-        <WsRtspVideo
+        <WsRtspCanvas
           key={key}
           play={play}
           ws={WS_URI}
