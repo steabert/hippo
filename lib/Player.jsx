@@ -1,24 +1,19 @@
 import React, {useState} from 'react'
+import PropTypes from 'prop-types'
 
 import {Container, Layer} from './Container.jsx'
-import WsRtspVideo from './WsRtspVideo.jsx'
-import WsRtspCanvas from './WsRtspCanvas.jsx'
+import Display from './Display.jsx'
 import Controls from './Controls.jsx'
 import Feedback from './Feedback.jsx'
 
-const WS_URI = 'ws://localhost:8854'
-const RTSP_URI_H264 = 'rtsp://localhost:8554/test'
-const RTSP_URI_MJPEG = 'rtsp://localhost:8555/test'
-
 function Player ({
-  ended,
-  onEnded,
-  onPlaying,
-  onCanPlay
+  hostname,
+  type,
+  parameters
 }) {
   const [play, setPlay] = useState(false)
   const [key, setKey] = useState(0)
-  const [src, setSrc] = useState('')
+  const [host, setHost] = useState(hostname)
   const [waiting, setWaiting] = useState(false)
 
   const toggle = () => {
@@ -26,7 +21,7 @@ function Player ({
       setPlay(false)
     } else {
       setWaiting(true)
-      setSrc(RTSP_URI_MJPEG)
+      setHost(hostname)
       setPlay(true)
     }
   }
@@ -37,17 +32,19 @@ function Player ({
   }
   const stop = () => {
     setPlay(false)
-    setSrc('')
+    setHost('')
+    setWaiting(false)
   }
 
   return (
     <Container>
       <Layer>
-        <WsRtspCanvas
+        <Display
           key={key}
           play={play}
-          ws={WS_URI}
-          rtsp={src}
+          host={host}
+          type={type}
+          parameters={parameters}
           onPlaying={() => setWaiting(false)}
         />
       </Layer>
@@ -57,7 +54,7 @@ function Player ({
       <Layer>
         <Controls
           play={play}
-          src={src}
+          src={host}
           onPlay={toggle}
           onStop={stop}
           onRefresh={refresh}
@@ -65,6 +62,10 @@ function Player ({
       </Layer>
     </Container>
   )
+}
+
+Player.defaultProps = {
+  hostname: window.location.hostname
 }
 
 export default Player
