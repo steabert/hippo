@@ -1,12 +1,12 @@
-import React, {useState, useEffect, useRef} from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 
 import debug from 'debug'
 
-import {pipelines} from 'media-stream-library'
+import { pipelines } from 'media-stream-library'
 
-import useEventState from './useEventState.js'
+import useEventState from './useEventState'
 
 const debugLog = debug('hippo:ws-rtsp-video')
 
@@ -26,12 +26,7 @@ const CanvasNative = styled.canvas`
  * playing: the video element playback is progressing
  */
 
-function WsRtspCanvas ({
-  play,
-  ws,
-  rtsp,
-  onPlaying
-}) {
+function WsRtspCanvas({ play, ws, rtsp, onPlaying }) {
   const canvasRef = useRef(null)
 
   // State tied to resources
@@ -45,7 +40,7 @@ function WsRtspCanvas ({
       const pipeline = new pipelines.Html5CanvasPipeline({
         ws: { uri: ws },
         rtsp: { uri: rtsp },
-        mediaElement: canvas
+        mediaElement: canvas,
       })
       setPipeline(pipeline)
 
@@ -77,9 +72,7 @@ function WsRtspCanvas ({
     }
   }, [play, pipeline, fetching])
 
-  return (
-    <CanvasNative ref={canvasRef} />
-  )
+  return <CanvasNative ref={canvasRef} />
 }
 
 WsRtspCanvas.propTypes = {
@@ -87,7 +80,7 @@ WsRtspCanvas.propTypes = {
   ws: PropTypes.string,
   rtsp: PropTypes.string,
   autoPlay: PropTypes.bool,
-  muted: PropTypes.bool
+  muted: PropTypes.bool,
 }
 
 WsRtspCanvas.defaultProps = {
@@ -95,7 +88,7 @@ WsRtspCanvas.defaultProps = {
   ws: '',
   rtsp: '',
   autoPlay: true,
-  muted: true
+  muted: true,
 }
 
 export default WsRtspCanvas

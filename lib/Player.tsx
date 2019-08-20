@@ -1,16 +1,18 @@
-import React, {useState} from 'react'
+import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 
-import {Container, Layer} from './Container.jsx'
-import Display from './Display.jsx'
-import Controls from './Controls.jsx'
-import Feedback from './Feedback.jsx'
+import { Container, Layer } from './Container'
+import { Display, MediaAPI, IParameters } from './Display'
+import { Controls } from './Controls'
+import { Feedback } from './Feedback'
 
-function Player ({
-  hostname,
-  type,
-  parameters
-}) {
+interface IPlayerProps {
+  readonly hostname: string
+  readonly type: MediaAPI
+  readonly parameters: IParameters
+}
+
+const Player: React.FC<IPlayerProps> = ({ hostname, type, parameters }) => {
   const [play, setPlay] = useState(false)
   const [key, setKey] = useState(0)
   const [host, setHost] = useState(hostname)
@@ -65,7 +67,7 @@ function Player ({
 }
 
 Player.defaultProps = {
-  hostname: window.location.hostname
+  hostname: window.location.hostname,
 }
 
 export default Player

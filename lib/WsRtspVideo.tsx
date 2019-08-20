@@ -1,12 +1,12 @@
-import React, {useState, useEffect, useRef} from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 
 import debug from 'debug'
 
-import {pipelines} from 'media-stream-library'
+import { pipelines } from 'media-stream-library'
 
-import useEventState from './useEventState.js'
+import useEventState from './useEventState'
 
 const debugLog = debug('hippo:ws-rtsp-video')
 
@@ -26,14 +26,7 @@ const VideoNative = styled.video`
  * playing: the video element playback is progressing
  */
 
-function WsRtspVideo ({
-  play,
-  ws,
-  rtsp,
-  autoPlay,
-  muted,
-  onPlaying
-}) {
+function WsRtspVideo({ play, ws, rtsp, autoPlay, muted, onPlaying }) {
   const videoRef = useRef(null)
 
   // State tied to events
@@ -68,7 +61,7 @@ function WsRtspVideo ({
       const pipeline = new pipelines.Html5VideoPipeline({
         ws: { uri: ws },
         rtsp: { uri: rtsp },
-        mediaElement: videoRef.current
+        mediaElement: videoRef.current,
       })
       setPipeline(pipeline)
 
@@ -89,9 +82,7 @@ function WsRtspVideo ({
     })
   }
 
-  return (
-    <VideoNative autoPlay={autoPlay} muted={muted} ref={videoRef} />
-  )
+  return <VideoNative autoPlay={autoPlay} muted={muted} ref={videoRef} />
 }
 
 WsRtspVideo.propTypes = {
@@ -99,7 +90,7 @@ WsRtspVideo.propTypes = {
   ws: PropTypes.string,
   rtsp: PropTypes.string,
   autoPlay: PropTypes.bool,
-  muted: PropTypes.bool
+  muted: PropTypes.bool,
 }
 
 WsRtspVideo.defaultProps = {
@@ -107,7 +98,7 @@ WsRtspVideo.defaultProps = {
   ws: '',
   rtsp: '',
   autoPlay: true,
-  muted: true
+  muted: true,
 }
 
 export default WsRtspVideo

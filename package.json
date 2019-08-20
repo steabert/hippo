@@ -2,16 +2,20 @@
   "name": "flodhast",
   "version": "1.0.0",
   "description": "React library for playing video.",
-  "jsnext:main": "dist-es6/index.js",
+  "main": "dist/esm/index.js",
+  "module": "dist/esm/index.js",
   "license": "MIT",
   "scripts": {
-    "lint": "standard",
-    "test": "standard && jest --coverage",
-    "dev": "webpack-dev-server --port 8080 --host 0.0.0.0"
-  },
-  "peerDependencies": {
-    "react": "^16.7.0-alpha.0",
-    "react-dom": "^16.7.0-alpha.0"
+    "lint": "yarn eslint && yarn prettier:check",
+    "test": "jest --coverage",
+    "dev": "webpack-dev-server --port 8080 --host 0.0.0.0",
+    "build:esm": "tsc -p tsconfig.json",
+    "build:bundle": "webpack",
+    "eslint": "eslint --ext '.ts,.tsx,.js,.jsx' lib/",
+    "prettier:check": "prettier --check 'lib/**/*.{ts,tsx,js,jsx}'",
+    "prettier:fix": "prettier --write 'lib/**/*.{ts,tsx,js,jsx}' --fix --loglevel silent",
+    "version": "conventional-changelog -p angular -i CHANGELOG.md -s && git add CHANGELOG.md",
+    "release": "yarn version --new-version `node node_modules/.bin/conventional-recommended-bump -p angular`"
   },
   "devDependencies": {
     "@babel/cli": "^7.1.2",
@@ -21,25 +25,54 @@
     "@babel/polyfill": "^7.0.0",
     "@babel/preset-env": "^7.1.0",
     "@babel/preset-react": "^7.0.0",
-    "babel-eslint": "^9.0.0",
+    "@types/debug": "^4.1.5",
+    "@types/jest": "24.0.18",
+    "@types/react": "^16.9.2",
+    "@types/react-dom": "^16.9.0",
+    "@types/styled-components": "^4.1.18",
+    "@typescript-eslint/eslint-plugin": "2.0.0",
+    "@typescript-eslint/parser": "2.0.0",
     "babel-loader": "^8.0.4",
+    "conventional-changelog-cli": "2.0.23",
+    "conventional-recommended-bump": "6.0.0",
+    "eslint": "6.2.1",
+    "eslint-config-prettier": "6.1.0",
+    "eslint-plugin-import": "2.18.2",
+    "eslint-plugin-promise": "4.2.1",
     "file-loader": "^1.1.11",
     "html-webpack-plugin": "^3.2.0",
+    "jest": "24.9.0",
+    "prettier": "1.18.2",
     "react": "^16.7.0-alpha.0",
     "react-dom": "^16.7.0-alpha.0",
     "react-svg-loader": "^2.1.0",
-    "standard": "^11.0.1",
     "style-loader": "^0.21.0",
     "styled-components": "^4.0.2",
+    "ts-jest": "24.0.2",
+    "typescript": "3.5.3",
     "webpack": "^4.14.0",
     "webpack-cli": "^3.0.8",
     "webpack-dev-server": "^3.1.9"
   },
-  "standard": {
-    "parser": "babel-eslint"
+  "peerDependencies": {
+    "react": "^16.7.0-alpha.0",
+    "react-dom": "^16.7.0-alpha.0"
   },
   "dependencies": {
     "debug": "^4.1.0",
-    "media-stream-library": "5.0.0-beta.3"
+    "media-stream-library": "^6.0.3"
+  },
+  "jest": {
+    "testRegex": "(/__tests__/.*|(\\.|/)test)\\.ts$",
+    "transform": {
+      "^.+\\.tsx?$": "ts-jest"
+    },
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js",
+      "jsx",
+      "json"
+    ]
   }
 }

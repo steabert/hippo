@@ -12,14 +12,10 @@ const FeedbackArea = styled.div`
   align-items: center;
 `
 
-function Feedback ({
-  waiting
-}) {
-  return (
-    <FeedbackArea>
-      {waiting && <Spinner />}
-    </FeedbackArea>
-  )
+interface IFeedbackProps {
+  readonly waiting: boolean
 }
 
-export default Feedback
+export const Feedback: React.FC<IFeedbackProps> = ({ waiting }) => {
+  return <FeedbackArea>{waiting && <Spinner />}</FeedbackArea>
+}
